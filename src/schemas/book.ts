@@ -1,0 +1,58 @@
+import { number, boolean, string, date, minLength, maxLength, minValue, maxValue, optional, pipe, object, description } from "valibot";
+
+export const BookSchema = object({
+    id: number("id must be a number"),
+    title: pipe(string(), minLength(1), maxLength(255)),
+    description: pipe(string(), minLength(1)),
+    price: pipe(number(), minValue(0)),
+    discount: pipe(number(), minValue(0), maxValue(100)),
+    rating: pipe(number(), minValue(0), maxValue(10)),
+    is_best_seller: boolean("is_best_seller must be a boolean"),
+    cover: pipe(string(), minLength(1)),
+    year: pipe(number(), minValue(1000), maxValue(9999)),
+    edition: optional(pipe(string(), maxLength(50))),
+    stock: pipe(number(), minValue(0)),
+    sales: pipe(number(), minValue(0)),
+    isbn: pipe(string(), maxLength(20)),
+    author_id: number("author_id must be a number"),
+    genre_id: number("genre_id must be a number"),
+    publisher_id: number("publisher_id must be a number"),
+    create_at: date("create_at must be a date"),
+    update_at: date("update_at must be a date"),
+});
+
+export const BookCreateSchema = object({
+    title: pipe(string(), minLength(1), maxLength(255)),
+    description: pipe(string(), minLength(1)),
+    price: pipe(number(), minValue(0)),
+    discount: pipe(number(), minValue(0), maxValue(100)),
+    rating: pipe(number(), minValue(0), maxValue(10)),
+    is_best_seller: boolean(),
+    cover: pipe(string(), minLength(1)),
+    year: pipe(number(), minValue(1000), maxValue(9999)),
+    edition: optional(pipe(string(), maxLength(50))),
+    stock: pipe(number(), minValue(0)),
+    sales: pipe(number(), minValue(0)),
+    isbn: pipe(string(), maxLength(20)),
+    author_id: number(),
+    genre_id: number(),
+    publisher_id: number(),
+});
+
+export const BookUpdateSchema = object({
+    title: optional(pipe(string(), minLength(1), maxLength(255))),
+    description: optional(pipe(string(), minLength(1))),
+    price: optional(pipe(number(), minValue(0))),
+    discount: optional(pipe(number(), minValue(0), maxValue(100))),
+    rating: optional(pipe(number(), minValue(0), maxValue(10))),
+    is_best_seller: optional(boolean()),
+    cover: optional(pipe(string(), minLength(1))),
+    year: optional(pipe(number(), minValue(1000), maxValue(9999))),
+    edition: optional(pipe(string(), maxLength(50))),
+    stock: optional(pipe(number(), minValue(0))),
+    sales: optional(pipe(number(), minValue(0))),
+    isbn: optional(pipe(string(), maxLength(20))),
+    author_id: optional(number()),
+    genre_id: optional(number()),
+    publisher_id: optional(number()),
+});

@@ -1,0 +1,33 @@
+{
+  "name": "book_api",
+  "module": "app",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run app.ts",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.15.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "cloudinary": "^2.6.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "file-type": "^20.5.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "mysql2": "^3.14.1",
+    "valibot": "^1.0.0",
+    "winston": "^3.17.0"
+  }
+}
