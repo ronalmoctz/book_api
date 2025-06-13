@@ -3,6 +3,8 @@
   "module": "app",
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "start": "node app.js",
     "dev": "bun run app.ts",
     "lint": "eslint ."
   },
@@ -18,6 +20,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "cloudinary": "^2.6.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

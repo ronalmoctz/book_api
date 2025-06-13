@@ -1,26 +1,18 @@
-import { createPool } from "mysql2/promise";
-import type { Pool } from "mysql2/promise";
-import { ENV } from './env';
+import { Pool } from "@neondatabase/serverless";
+import { ENV } from "./env";
 
-export const pool: Pool = createPool({
-    host: ENV.DB_HOST,
-    port: ENV.DB_PORT,
-    user: ENV.DB_USER,
-    password: ENV.DB_PASSWORD,
-    database: ENV.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    decimalNumbers: true
+
+const pool = new Pool({
+    connectionString: `postgresql://${ENV.PGUSER}:${ENV.PGDATABASE}@${ENV.PGHOST}/${ENV.PGDATABASE}?sslmode=require`
 })
 
-export const connectDB = async (): Promise<void> => {
-    try {
-        const connection = await pool.getConnection();
-        console.log(`Connected to database: ${ENV.DB_NAME} on ${ENV.DB_HOST}:${ENV.DB_PORT}`);
-        connection.release();
-    } catch (error) {
-        console.error(`Error connecting to database: ${ENV.DB_NAME}`, error);
-        process.exit(1);
-    }
+export async function getPgVersion() {
+    const { rows } = await pool.query<{ version: string }>(`SELECT verison()`)
+    return rows[0].version
 }
+
+getPgVersion()
+    .then(v => console.log(`PostgreSQL version:`, v))
+    .then(err => console.error('Error al conectar con la base de datos:', err))
+
+export default pool;

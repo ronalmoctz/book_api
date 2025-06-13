@@ -15,3 +15,6 @@ export const CreateGenreSchema = object({
 export const UpdateGenreSchema = object({
     name: pipe(string(), maxLength(50))
 })
+
+
+

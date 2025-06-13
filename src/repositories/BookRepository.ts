@@ -51,8 +51,8 @@ export class BookRepository {
 
         const [result] = await pool.query(
             `UPDATE books 
-         SET ${setClause}, update_at = CURRENT_TIMESTAMP 
-       WHERE id = ?`,
+            SET ${setClause}, update_at = CURRENT_TIMESTAMP 
+            WHERE id = ?`,
             [...values, id]
         );
         return (result as { affectedRows: number }).affectedRows > 0;

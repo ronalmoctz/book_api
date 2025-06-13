@@ -1,4 +1,5 @@
-import { pool } from "../config/database";
+import pool from "../config/database";
+import type { Pool, PoolClient } from '@neondatabase/serverless';
 import { AuthorModel } from "../models/AuthorModel";
 import type { Author, AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author";
 import { logger } from "../helpers/logger";

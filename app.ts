@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { ENV } from './src/config/env';
-import { connectDB } from './src/config/database';
 import { httpLogger } from './src/middlewares/httpLogger';
 import PublisherRoute from './src/routes/publisher';
 import AuthorRoute from './src/routes/authors';
@@ -50,8 +49,6 @@ app.use(errorHandler)
 
 const bootstrap = async () => {
     try {
-        await connectDB()
-
         app.listen(ENV.PORT, () => {
             console.log(`🚀 Server running on http://localhost:${ENV.PORT}`);
         });
