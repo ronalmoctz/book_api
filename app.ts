@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import cors from 'cors';
 import { ENV } from './src/config/env';
 import { httpLogger } from './src/middlewares/httpLogger';
@@ -6,8 +6,7 @@ import PublisherRoute from './src/routes/publisher';
 import AuthorRoute from './src/routes/authors';
 import GenreRoute from './src/routes/genres';
 import BookRoute from './src/routes/books';
-import { errorHandler } from './src/middlewares/errorHandler';
-import multer from 'multer';
+
 
 
 const app = express();
@@ -30,21 +29,6 @@ app.use('/api/authors', AuthorRoute)
 app.use('/api/publishers', PublisherRoute)
 app.use('/api/genres', GenreRoute)
 
-app.use((err: unknown, _req: Request, res: Response, next: NextFunction): void => {
-    if (err instanceof multer.MulterError) {
-        const msg =
-            err.code === 'LIMIT_FILE_SIZE'
-                ? 'El archivo excede 1 MB'
-                : `Error al procesar archivo: ${err.message}`;
-        res.status(400).json({ message: msg });
-        return;
-    }
-    next(err);
-}
-);
-
-
-app.use(errorHandler)
 
 
 const bootstrap = async () => {
