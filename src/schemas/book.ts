@@ -1,4 +1,4 @@
-import { number, boolean, string, date, minLength, maxLength, minValue, maxValue, optional, pipe, object, description } from "valibot";
+import { number, boolean, string, date, minLength, maxLength, minValue, maxValue, optional, pipe, object } from "valibot";
 
 export const BookSchema = object({
     id: number("id must be a number"),
@@ -17,8 +17,8 @@ export const BookSchema = object({
     author_id: number("author_id must be a number"),
     genre_id: number("genre_id must be a number"),
     publisher_id: number("publisher_id must be a number"),
-    create_at: date("create_at must be a date"),
-    update_at: date("update_at must be a date"),
+    created_at: date("create_at must be a date"),
+    updated_at: date("update_at must be a date"),
 });
 
 export const BookCreateSchema = object({

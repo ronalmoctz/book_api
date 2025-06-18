@@ -3,8 +3,8 @@ import { number, string, date, maxLength, pipe, object } from "valibot";
 export const GenreSchema = object({
     id: number(),
     name: pipe(string(), maxLength(50)),
-    create_at: date(),
-    update_at: date()
+    created_at: date(),
+    updated_at: date()
 })
 
 

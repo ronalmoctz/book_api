@@ -1,107 +1,120 @@
-import { pool } from "../config/database";
+import type { PoolClient } from "@neondatabase/serverless";
+import pool from "../config/database";
 import { GenreModel } from "../models/GenreModel";
 import type { Genre } from "../interfaces/genre";
 import { logger } from "../helpers/logger";
 
-
 export class GenreRepository {
+    private async getClient(): Promise<PoolClient> {
+        return await pool.connect();
+    }
+
     async findAllGenres(): Promise<Genre[]> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query("SELECT * FROM genre");
-
-            if (!Array.isArray(rows)) throw new Error("Expected an array from query result");
-
-            return rows.map(GenreModel.fromRow).map((genre) => genre.toGenre());
-        }
-        catch (error) {
+            const { rows } = await client.query<Genre>("SELECT * FROM genre");
+            return rows.map(GenreModel.fromRow).map(g => g.toGenre());
+        } catch (error) {
             logger.error("Error fetching all genres:", error);
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 
     async findGenreById(id: number): Promise<Genre | null> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query("SELECT * FROM genre WHERE id = ?", [id]);
-
-            if (!Array.isArray(rows)) throw new Error("Expected an array from query result");
-
+            const { rows } = await client.query<Genre>(
+                "SELECT * FROM genre WHERE id = $1",
+                [id]
+            );
             const row = rows[0];
             return row ? GenreModel.fromRow(row).toGenre() : null;
-        }
-        catch (error) {
-            console.error("Error fetching genre by ID:", error);
+        } catch (error) {
+            logger.error("Error fetching genre by ID:", error);
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 
     async findGenreByName(name: string): Promise<Genre | null> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query("SELECT * FROM genre WHERE name = ?", [name])
-
-            if (!Array.isArray(rows)) throw new Error("Expected an array from query result");
-
+            const { rows } = await client.query<Genre>(
+                "SELECT * FROM genre WHERE name = $1",
+                [name]
+            );
             const row = rows[0];
             return row ? GenreModel.fromRow(row).toGenre() : null;
-
         } catch (error) {
             logger.error("Error fetching genre by name:", { error, name });
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 
-    async createGenre(genre: Omit<Genre, "id" | "create_at" | "update_at">): Promise<Genre> {
+    async createGenre(input: Omit<Genre, "id" | "created_at" | "updated_at">): Promise<Genre> {
+        const client = await this.getClient();
         try {
-            const { name } = genre;
-            const [result] = await pool.query(
-                `INSERT INTO genre (name) VALUES (?)`,
-                [name]
-            )
-
-            const insertResult = result as { insertId: number };
-
-            return {
-                id: insertResult.insertId,
-                ...genre,
-                create_at: new Date(),
-                update_at: new Date()
-            }
-        }
-        catch (error) {
+            const insertQuery = `
+        INSERT INTO genre (name)
+        VALUES ($1)
+        RETURNING *
+      `;
+            const { rows } = await client.query<Genre>(insertQuery, [input.name]);
+            return GenreModel.fromRow(rows[0]).toGenre();
+        } catch (error) {
             logger.error("Error creating genre:", error);
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 
-    async updateGenre(id: number, data: Partial<Omit<Genre, "id" | "create_at">>): Promise<Genre | null> {
+    async updateGenre(
+        id: number,
+        data: Partial<Omit<Genre, "id" | "created_at">>
+    ): Promise<Genre | null> {
+        const client = await this.getClient();
         try {
-            const { name } = data;
-            const [result] = await pool.query(
-                "UPDATE genre SET name = ?, update_at = CURRENT_TIMESTAMP WHERE id = ?",
-                [name, id]
-            );
-
-            const updateResult = result as { affectedRows: number };
-            if (updateResult.affectedRows === 0) return null;
-            // Obtener el género actualizado
-            return this.findGenreById(id);
+            const updateQuery = `
+        UPDATE genre
+        SET name = COALESCE($1, name),
+            update_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *
+      `;
+            const { rows } = await client.query<Genre>(updateQuery, [
+                data.name ?? null,
+                id
+            ]);
+            const updated = rows[0];
+            return updated ? GenreModel.fromRow(updated).toGenre() : null;
         } catch (error) {
             logger.error("Error updating genre:", error, id);
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 
     async deleteGenre(id: number): Promise<boolean> {
+        const client = await this.getClient();
         try {
-            const [result] = await pool.query(
-                "DELETE FROM genre WHERE id = ?", [id]
+            const result = await client.query(
+                "DELETE FROM genre WHERE id = $1",
+                [id]
             );
-
-            const deleteResult = result as { affectedRows: number };
-
-            return deleteResult.affectedRows > 0;
+            const count = result.rowCount ?? 0;
+            return count > 0;
         } catch (error) {
             logger.error("Error deleting genre", { error, id });
             throw new Error("Database error");
+        } finally {
+            client.release();
         }
     }
 }

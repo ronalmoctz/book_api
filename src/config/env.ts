@@ -8,5 +8,5 @@ export const ENV = {
     PGHOST: process.env.PGHOST,
     PGDATABASE: process.env.PGDATABASE,
     PGUSER: process.env.PGUSER,
-    PASSWORD: process.env.DB_PASSWORD,
+    PGPASSWORD: process.env.PGPASSWORD,
 };

@@ -1,118 +1,128 @@
-import { pool } from '../config/database';
+import type { PoolClient } from "@neondatabase/serverless";
+import pool from '../config/database';
 import { PublisherModel } from '../models/PublisherModel';
-import type { Publisher, PublisherCreate } from '../interfaces/publisher';
+import type { Publisher, PublisherCreate, PublisherUpdate } from '../interfaces/publisher';
 import { logger } from '../helpers/logger';
 
-
 export class PublisherRepository {
-    async finAllPublisher(): Promise<Publisher[]> {
+    private async getClient(): Promise<PoolClient> {
+        return await pool.connect();
+    }
+
+    async findAllPublishers(): Promise<Publisher[]> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query('SELECT * FROM publishers');
-
-            if (!Array.isArray(rows)) throw new Error('Expected an array from query result');
-
-            return rows.map(PublisherModel.fromRow).map((publisher) => publisher.toPublisher());
+            const { rows } = await client.query<Publisher>(`SELECT * FROM publishers`);
+            return rows.map(PublisherModel.fromRow).map(p => p.toPublisher());
         } catch (error) {
             logger.error('Error fetching all publishers:', error);
             throw new Error('Database error');
+        } finally {
+            client.release();
         }
     }
 
     async findPublisherById(id: number): Promise<Publisher | null> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query('SELECT * FROM publishers WHERE id = ?', [id]);
-
-            if (!Array.isArray(rows)) throw new Error('Expected an array from query result');
-
+            const { rows } = await client.query<Publisher>(
+                `SELECT * FROM publishers WHERE id = $1`,
+                [id]
+            );
             const row = rows[0];
             return row ? PublisherModel.fromRow(row).toPublisher() : null;
         } catch (error) {
             logger.error('Error fetching publisher by ID:', error);
             throw new Error('Database error');
+        } finally {
+            client.release();
         }
     }
 
     async findPublisherByName(name: string): Promise<Publisher | null> {
+        const client = await this.getClient();
         try {
-            const [rows] = await pool.query('SELECT * FROM publishers WHERE name = ?', [name]);
-            if (!Array.isArray(rows)) throw new Error('Expected an array from query result');
+            const { rows } = await client.query<Publisher>(
+                `SELECT * FROM publishers WHERE name ILIKE $1`,
+                [`%${name}%`]
+            );
             const row = rows[0];
             return row ? PublisherModel.fromRow(row).toPublisher() : null;
         } catch (error) {
             logger.error('Error fetching publisher by name:', error);
             throw new Error('Database error');
+        } finally {
+            client.release();
         }
     }
 
-    async cratePublisher(publisher: PublisherCreate): Promise<Publisher> {
+    async createPublisher(data: PublisherCreate): Promise<Publisher> {
+        const client = await this.getClient();
         try {
-            const { name, address, phone, email } = publisher;
-            const [result] = await pool.query(
-                `INSERT INTO publishers (name, address, phone, email) VALUES (?, ?, ?, ?)`,
-                [name, address, phone, email]
-            );
-
-            const insertResult = result as { insertId: number };
-
-            return {
-                id: insertResult.insertId,
-                name: publisher.name,
-                address: publisher.address,
-                phone: publisher.phone,
-                email: publisher.email,
-                create_at: new Date(),
-                update_at: new Date()
-            }
-
+            const insertQuery = `
+        INSERT INTO publishers (name, address, phone, email)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+      `;
+            const values = [data.name, data.address, data.phone, data.email];
+            const { rows } = await client.query<Publisher>(insertQuery, values);
+            return PublisherModel.fromRow(rows[0]).toPublisher();
         } catch (error) {
             logger.error('Error creating publisher:', error);
             throw new Error('Database error');
+        } finally {
+            client.release();
         }
-
     }
 
-    async deletePublisher(id: number): Promise<void> {
+    async updatePublisher(
+        id: number,
+        data: Partial<PublisherUpdate>
+    ): Promise<Publisher | null> {
+        const client = await this.getClient();
         try {
-            const [result] = await pool.query('DELETE FROM publishers WHERE id = ?', [id]);
+            const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+            if (!entries.length) return null;
 
-            const deleteResult = result as { affectedRows: number };
+            const setClauses: string[] = [];
+            const params: unknown[] = [];
+            entries.forEach(([key, value], idx) => {
+                setClauses.push(`${key} = $${idx + 1}`);
+                params.push(value);
+            });
+            // add updated_at and id
+            params.push(id);
+            const updateQuery = `
+        UPDATE publishers
+        SET ${setClauses.join(', ')}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $${params.length}
+        RETURNING *
+      `;
+            const { rows } = await client.query<Publisher>(updateQuery, params);
+            const updated = rows[0];
+            return updated ? PublisherModel.fromRow(updated).toPublisher() : null;
+        } catch (error) {
+            logger.error('Error updating publisher:', error);
+            throw new Error('Database error');
+        } finally {
+            client.release();
+        }
+    }
 
-            if (deleteResult.affectedRows === 0) {
-                throw new Error('Publisher not found');
-            }
+    async deletePublisher(id: number): Promise<boolean> {
+        const client = await this.getClient();
+        try {
+            const result = await client.query(
+                `DELETE FROM publishers WHERE id = $1`,
+                [id]
+            );
+            const count = result.rowCount ?? 0;
+            return count > 0;
         } catch (error) {
             logger.error('Error deleting publisher:', error);
             throw new Error('Database error');
-        }
-    }
-
-    async updatePublisher(id: number, data: Partial<Omit<Publisher, 'id' | 'created_at' | 'update_at'>>): Promise<Publisher | null> {
-        try {
-            const { name, address, phone, email } = data;
-            const [result] = await pool.query(
-                `UPDATE publishers SET name = ?, address = ? , phone = ?, email = ?, update_at = ? WHERE id = ?`,
-                [name, address, phone, email, new Date(), id]
-            );
-
-            const updateResult = result as { affectedRows: number };
-
-            if (updateResult.affectedRows === 0) {
-                throw new Error('Publisher not found');
-            }
-
-            return {
-                id,
-                name: data.name || '',
-                address: data.address || '',
-                phone: data.phone || '',
-                email: data.email || '',
-                create_at: new Date(),
-                update_at: new Date()
-            }
-        }
-        catch (error) {
-            logger.error('Error updating publisher:', error);
-            throw new Error('Database error');
+        } finally {
+            client.release();
         }
     }
 }

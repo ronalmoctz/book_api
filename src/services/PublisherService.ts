@@ -15,7 +15,7 @@ export class PublisherService {
      * @returns {Promise<Publisher[]>}
      */
     listPublishers(): Promise<Publisher[]> {
-        return this.publishRepo.finAllPublisher();
+        return this.publishRepo.findAllPublishers()
     }
 
     /**
@@ -54,7 +54,7 @@ export class PublisherService {
                 throw new BadRequestException('El publisher ya está registrado con ese nombre');
             }
         }
-        return this.publishRepo.cratePublisher(input);
+        return this.publishRepo.createPublisher(input);
     }
 
     /**

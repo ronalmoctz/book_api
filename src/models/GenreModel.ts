@@ -6,8 +6,8 @@ export class GenreModel {
     constructor(
         public readonly id: number,
         public name: string,
-        public create_at: Date,
-        public update_at: Date
+        public created_at: Date,
+        public updated_at: Date
     ) { }
 
     static fromRow(row: unknown): GenreModel {
@@ -22,8 +22,8 @@ export class GenreModel {
         return new GenreModel(
             data.id,
             data.name,
-            new Date(data.create_at),
-            new Date(data.update_at)
+            new Date(data.created_at),
+            new Date(data.updated_at)
         )
     }
 
@@ -31,8 +31,8 @@ export class GenreModel {
         return {
             id: this.id,
             name: this.name,
-            create_at: this.create_at,
-            update_at: this.update_at
+            created_at: this.created_at,
+            updated_at: this.updated_at
         }
     }
 }

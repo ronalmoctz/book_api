@@ -20,18 +20,33 @@ export class BookModel {
         public author_id: number,
         public genre_id: number,
         public publisher_id: number,
-        public create_at: Date,
-        public update_at: Date
+        public created_at: Date,
+        public updated_at: Date
     ) { }
 
     static fromRow(row: any): BookModel {
+        // Normalizar datos que PostgreSQL puede devolver como strings
         const normalizedRow = {
             ...row,
-            is_best_seller: typeof row.is_best_seller === 'number'
-                ? Boolean(row.is_best_seller)
-                : row.is_best_seller
+            // Convertir números que vienen como strings
+            price: typeof row.price === 'string' ? parseFloat(row.price) : row.price,
+            rating: typeof row.rating === 'string' ? parseFloat(row.rating) : row.rating,
+            discount: typeof row.discount === 'string' ? parseInt(row.discount, 10) : row.discount,
+            year: typeof row.year === 'string' ? parseInt(row.year, 10) : row.year,
+            stock: typeof row.stock === 'string' ? parseInt(row.stock, 10) : row.stock,
+            sales: typeof row.sales === 'string' ? parseInt(row.sales, 10) : row.sales,
+            author_id: typeof row.author_id === 'string' ? parseInt(row.author_id, 10) : row.author_id,
+            genre_id: typeof row.genre_id === 'string' ? parseInt(row.genre_id, 10) : row.genre_id,
+            publisher_id: typeof row.publisher_id === 'string' ? parseInt(row.publisher_id, 10) : row.publisher_id,
+            // Manejar booleanos (pueden venir como string 'true'/'false' o como número 0/1)
+            is_best_seller: typeof row.is_best_seller === 'string'
+                ? row.is_best_seller === 'true' || row.is_best_seller === 't'
+                : typeof row.is_best_seller === 'number'
+                    ? Boolean(row.is_best_seller)
+                    : row.is_best_seller
         };
-        const result = safeParse(BookSchema, normalizedRow)
+
+        const result = safeParse(BookSchema, normalizedRow);
 
         if (!result.success) {
             throw new Error(`Invalid Book data: ${JSON.stringify(result.issues)}`);
@@ -56,10 +71,11 @@ export class BookModel {
             data.author_id,
             data.genre_id,
             data.publisher_id,
-            new Date(data.create_at),
-            new Date(data.update_at)
-        )
+            new Date(data.created_at),
+            new Date(data.updated_at)
+        );
     }
+
     toBook(): Book {
         return {
             id: this.id,
@@ -78,10 +94,11 @@ export class BookModel {
             author_id: this.author_id,
             genre_id: this.genre_id,
             publisher_id: this.publisher_id,
-            create_at: this.create_at,
-            update_at: this.update_at
-        }
+            created_at: this.created_at,
+            updated_at: this.updated_at
+        };
     }
+
     static fromBook(book: Book): BookModel {
         return new BookModel(
             book.id,
@@ -100,8 +117,8 @@ export class BookModel {
             book.author_id,
             book.genre_id,
             book.publisher_id,
-            new Date(book.create_at),
-            new Date(book.update_at)
-        )
+            new Date(book.created_at),
+            new Date(book.updated_at)
+        );
     }
 }

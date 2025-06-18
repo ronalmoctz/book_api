@@ -10,8 +10,8 @@ export class AuthorModel {
         public last_name: string,
         public bio: string | null,
         public birth_date: Date | null,
-        public create_at: Date,
-        public update_at: Date
+        public created_at: Date,
+        public updated_at: Date
     ) { }
 
     static fromRow(row: unknown): AuthorModel {
@@ -29,8 +29,8 @@ export class AuthorModel {
             data.last_name,
             data.bio ?? null,
             data.birth_date ?? null,
-            new Date(data.create_at),
-            new Date(data.update_at)
+            new Date(data.created_at),
+            new Date(data.updated_at)
         )
     }
 
@@ -41,8 +41,8 @@ export class AuthorModel {
             last_name: this.last_name,
             bio: this.bio ?? undefined,
             birth_date: this.birth_date ?? undefined,
-            create_at: this.create_at,
-            update_at: this.update_at
+            created_at: this.created_at,
+            updated_at: this.updated_at
         }
     }
 }

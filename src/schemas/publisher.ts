@@ -6,8 +6,8 @@ export const PublisherSchema = object({
     address: nullable(pipe(string(), maxLength(200))),
     phone: nullable(pipe(string(), maxLength(20))),
     email: nullable(pipe(string(), maxLength(100), email())),
-    create_at: date(),
-    update_at: date()
+    created_at: date(),
+    updated_at: date()
 });
 
 export const PublisherCreateSchema = object({

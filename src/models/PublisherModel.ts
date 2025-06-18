@@ -9,8 +9,8 @@ export class PublisherModel {
         public address: string | null,
         public phone: string | null,
         public email: string | null,
-        public create_at: Date,
-        public update_at: Date
+        public created_at: Date,
+        public updated_at: Date
     ) { }
 
     static fromRow(row: unknown): PublisherModel {
@@ -28,8 +28,8 @@ export class PublisherModel {
             data.address ?? null,
             data.phone ?? null,
             data.email ?? null,
-            new Date(data.create_at),
-            new Date(data.update_at)
+            new Date(data.created_at),
+            new Date(data.updated_at)
         )
     }
 
@@ -40,8 +40,8 @@ export class PublisherModel {
             address: this.address,
             phone: this.phone,
             email: this.email,
-            create_at: this.create_at,
-            update_at: this.update_at
+            created_at: this.created_at,
+            updated_at: this.updated_at
         }
     }
 }
