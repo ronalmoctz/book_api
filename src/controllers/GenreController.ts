@@ -3,13 +3,13 @@ import { safeParse } from 'valibot';
 import {
     CreateGenreSchema,
     UpdateGenreSchema
-} from '../schemas/genre';
+} from '../schemas/genre.js';
 import type {
     GenreCreateInput,
     GenreUpdateInput
-} from '../interfaces/genre';
-import { GenreService } from '../services/GenreService';
-import { logger } from '../helpers/logger';
+} from '../interfaces/genre.js';
+import { GenreService } from '../services/GenreService.js';
+import { logger } from '../helpers/logger.js';
 
 const service = new GenreService();
 

@@ -2,10 +2,10 @@ import type {
     Publisher,
     PublisherCreate,
     PublisherUpdate,
-} from '../interfaces/publisher';
-import { PublisherRepository } from '../repositories/PublisherRepository';
-import { NotFoundException } from '../exceptions/NotFoundException';
-import { BadRequestException } from '../exceptions/BadRequestException';
+} from '../interfaces/publisher.js';
+import { PublisherRepository } from '../repositories/PublisherRepository.js';
+import { NotFoundException } from '../exceptions/NotFoundException.js';
+import { BadRequestException } from '../exceptions/BadRequestException.js';
 
 export class PublisherService {
     private publishRepo = new PublisherRepository();

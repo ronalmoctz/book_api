@@ -1,5 +1,5 @@
 import type { InferInput } from 'valibot';
-import { PublisherSchema, PublisherCreateSchema, PublisherUpdateSchema } from '../schemas/publisher';
+import { PublisherSchema, PublisherCreateSchema, PublisherUpdateSchema } from '../schemas/publisher.js';
 
 export type Publisher = InferInput<typeof PublisherSchema>;
 

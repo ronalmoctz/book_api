@@ -1,5 +1,5 @@
 import { Pool } from "@neondatabase/serverless";
-import { ENV } from "./env";
+import { ENV } from "./env.js";
 
 
 export const pool = new Pool({

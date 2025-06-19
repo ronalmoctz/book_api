@@ -1,11 +1,11 @@
 import type { PoolClient } from "@neondatabase/serverless";
-import pool from '../config/database';
-import { logger } from '../helpers/logger';
-import type { Book, BookCreate, BookUpdate } from '../interfaces/book';
-import { BookModel } from '../models/BookModel';
+import pool from '../config/database.js';
+import { logger } from '../helpers/logger.js';
+import type { Book, BookCreate, BookUpdate } from '../interfaces/book.js';
+import { BookModel } from '../models/BookModel.js';
 import { safeParse } from 'valibot';
-import { BookFilterSchema } from '../schemas/bookFilter';
-import type { BookFilter } from '../interfaces/bookFilter';
+import { BookFilterSchema } from '../schemas/bookFilter.js';
+import type { BookFilter } from '../interfaces/bookFilter.js';
 
 export class BookRepository {
     private async getClient(): Promise<PoolClient> {

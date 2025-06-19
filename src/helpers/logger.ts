@@ -37,15 +37,6 @@ const logger = createLogger({
         }),
         ...(process.env.NODE_ENV === 'development' ? [format.colorize({ all: true })] : [])
     ),
-    transports: [
-        new transports.Console(),
-        ...(process.env.NODE_ENV === 'production'
-            ? [
-                new transports.File({ filename: 'logs/error.log', level: 'error' }),
-                new transports.File({ filename: 'logs/combined.log' }),
-            ]
-            : []),
-    ],
 });
 
 export { logger };

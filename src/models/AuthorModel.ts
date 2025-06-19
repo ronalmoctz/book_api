@@ -1,5 +1,5 @@
-import type { Author } from "../interfaces/author";
-import { AuthorSchema } from "../schemas/author";
+import type { Author } from "../interfaces/author.js";
+import { AuthorSchema } from "../schemas/author.js";
 import { safeParse } from "valibot";
 
 

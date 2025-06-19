@@ -1,7 +1,7 @@
-import type { Genre, GenreCreateInput, GenreUpdateInput } from "../interfaces/genre";
-import { GenreRepository } from "../repositories/GenreRepository";
-import { NotFoundException } from "../exceptions/NotFoundException";
-import { BadRequestException } from "../exceptions/BadRequestException";
+import type { Genre, GenreCreateInput, GenreUpdateInput } from "../interfaces/genre.js";
+import { GenreRepository } from "../repositories/GenreRepository.js";
+import { NotFoundException } from "../exceptions/NotFoundException.js";
+import { BadRequestException } from "../exceptions/BadRequestException.js";
 
 export class GenreService {
     private genreRepo = new GenreRepository();

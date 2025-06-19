@@ -1,5 +1,5 @@
 import type { InferInput } from 'valibot';
-import { GenreSchema, CreateGenreSchema, UpdateGenreSchema } from '../schemas/genre';
+import { GenreSchema, CreateGenreSchema, UpdateGenreSchema } from '../schemas/genre.js';
 
 export type Genre = InferInput<typeof GenreSchema>;
 export type GenreCreateInput = InferInput<typeof CreateGenreSchema>

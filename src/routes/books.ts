@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { BookController } from '../controllers/BookController';
-import { uploadCover } from '../middlewares/uploadCover';
+import { BookController } from '../controllers/BookController.js';
+import { uploadCover } from '../middlewares/uploadCover.js';
 
 const router = Router();
 const controller = new BookController();

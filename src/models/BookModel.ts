@@ -1,5 +1,5 @@
-import type { Book } from "../interfaces/book";
-import { BookSchema } from "../schemas/book";
+import type { Book } from "../interfaces/book.js";
+import { BookSchema } from "../schemas/book.js";
 import { safeParse } from "valibot";
 
 export class BookModel {

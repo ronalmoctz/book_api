@@ -1,8 +1,8 @@
 import type { PoolClient } from "@neondatabase/serverless";
-import pool from "../config/database";
-import { GenreModel } from "../models/GenreModel";
-import type { Genre } from "../interfaces/genre";
-import { logger } from "../helpers/logger";
+import pool from "../config/database.js";
+import { GenreModel } from "../models/GenreModel.js";
+import type { Genre } from "../interfaces/genre.js";
+import { logger } from "../helpers/logger.js";
 
 export class GenreRepository {
     private async getClient(): Promise<PoolClient> {

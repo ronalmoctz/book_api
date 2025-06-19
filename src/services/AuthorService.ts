@@ -1,7 +1,7 @@
-import { AuthorRepository } from "../repositories/AuthorRepository";
-import type { Author, AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author";
-import { BadRequestException } from "../exceptions/BadRequestException";
-import { NotFoundException } from "../exceptions/NotFoundException";
+import { AuthorRepository } from "../repositories/AuthorRepository.js";
+import type { Author, AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author.js";
+import { BadRequestException } from "../exceptions/BadRequestException.js";
+import { NotFoundException } from "../exceptions/NotFoundException.js";
 
 export class AuthorService {
     private authorRepo = new AuthorRepository();

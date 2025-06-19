@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { safeParse } from "valibot";
-import { AuthorService } from "../services/AuthorService";
-import { AuthorCreateSchema, AuthorUpdateSchema } from "../schemas/author";
-import type { AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author";
-import { logger } from "../helpers/logger";
+import { AuthorService } from "../services/AuthorService.js";
+import { AuthorCreateSchema, AuthorUpdateSchema } from "../schemas/author.js";
+import type { AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author.js";
+import { logger } from "../helpers/logger.js";
 
 const service = new AuthorService();
 

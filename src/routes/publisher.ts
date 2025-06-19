@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import { PublisherController } from '../controllers/PublisherController';
+import { PublisherController } from '../controllers/PublisherController.js';
 
 const router = Router();
 const controller = new PublisherController();

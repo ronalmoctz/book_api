@@ -1,5 +1,5 @@
 import type { InferInput } from 'valibot';
-import { BookSchema, BookCreateSchema, BookUpdateSchema } from '../schemas/book';
+import { BookSchema, BookCreateSchema, BookUpdateSchema } from '../schemas/book.js';
 
 export type Book = InferInput<typeof BookSchema>;
 

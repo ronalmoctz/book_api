@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import { ENV } from './src/config/env';
-import { httpLogger } from './src/middlewares/httpLogger';
-import PublisherRoute from './src/routes/publisher';
-import AuthorRoute from './src/routes/authors';
-import GenreRoute from './src/routes/genres';
-import BookRoute from './src/routes/books';
+import { ENV } from './src/config/env.js';
+import { httpLogger } from './src/middlewares/httpLogger.js';
+import PublisherRoute from './src/routes/publisher.js';
+import AuthorRoute from './src/routes/authors.js';
+import GenreRoute from './src/routes/genres.js';
+import BookRoute from './src/routes/books.js';
 
 
 

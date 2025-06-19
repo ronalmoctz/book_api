@@ -3,13 +3,13 @@ import { safeParse } from 'valibot';
 import {
     PublisherCreateSchema,
     PublisherUpdateSchema
-} from '../schemas/publisher';
+} from '../schemas/publisher.js';
 import type {
     PublisherCreate,
     PublisherUpdate
-} from '../interfaces/publisher';
-import { PublisherService } from '../services/PublisherService';
-import { logger } from '../helpers/logger';
+} from '../interfaces/publisher.js';
+import { PublisherService } from '../services/PublisherService.js';
+import { logger } from '../helpers/logger.js';
 
 const service = new PublisherService();
 

@@ -1,8 +1,8 @@
-import pool from "../config/database";
+import pool from "../config/database.js";
 import type { PoolClient } from "@neondatabase/serverless";
-import type { Author, AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author";
-import { AuthorModel } from "../models/AuthorModel";
-import { logger } from "../helpers/logger";
+import type { Author, AuthorCreateInput, AuthorUpdateInput } from "../interfaces/author.js";
+import { AuthorModel } from "../models/AuthorModel.js";
+import { logger } from "../helpers/logger.js";
 
 export class AuthorRepository {
     private async getClient(): Promise<PoolClient> {

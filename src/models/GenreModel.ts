@@ -1,5 +1,5 @@
-import type { Genre } from "../interfaces/genre";
-import { GenreSchema } from "../schemas/genre";
+import type { Genre } from "../interfaces/genre.js";
+import { GenreSchema } from "../schemas/genre.js";
 import { safeParse } from "valibot";
 
 export class GenreModel {

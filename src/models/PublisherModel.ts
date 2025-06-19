@@ -1,5 +1,5 @@
-import type { Publisher } from "../interfaces/publisher";
-import { PublisherSchema } from "../schemas/publisher";
+import type { Publisher } from "../interfaces/publisher.js";
+import { PublisherSchema } from "../schemas/publisher.js";
 import { safeParse } from "valibot";
 
 export class PublisherModel {

@@ -1,7 +1,7 @@
-import { BookRepository } from '../repositories/BookRepository';
-import type { Book, BookCreate, BookUpdate } from '../interfaces/book';
-import { NotFoundException } from '../exceptions/NotFoundException';
-import { BadRequestException } from '../exceptions/BadRequestException';
+import { BookRepository } from '../repositories/BookRepository.js';
+import type { Book, BookCreate, BookUpdate } from '../interfaces/book.js';
+import { NotFoundException } from '../exceptions/NotFoundException.js';
+import { BadRequestException } from '../exceptions/BadRequestException.js';
 
 export class BookService {
     private repo = new BookRepository();

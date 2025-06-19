@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { logger } from '../helpers/logger';
-import { BaseException } from '../exceptions/BaseException';
+import { logger } from '../helpers/logger.js';
+import { BaseException } from '../exceptions/BaseException.js';
 
 export const errorHandler = (
     err: unknown,

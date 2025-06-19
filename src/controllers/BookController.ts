@@ -1,12 +1,12 @@
 import type { Request, Response, NextFunction } from 'express';
 import { safeParse } from 'valibot';
-import { BookService } from '../services/BookService';
-import { logger } from '../helpers/logger';
+import { BookService } from '../services/BookService.js';
+import { logger } from '../helpers/logger.js';
 import {
     BookCreateSchema,
     BookUpdateSchema
-} from '../schemas/book';
-import type { BookCreate, BookUpdate } from '../interfaces/book';
+} from '../schemas/book.js';
+import type { BookCreate, BookUpdate } from '../interfaces/book.js';
 
 const service = new BookService();
 

@@ -1,8 +1,8 @@
 import type { PoolClient } from "@neondatabase/serverless";
-import pool from '../config/database';
-import { PublisherModel } from '../models/PublisherModel';
-import type { Publisher, PublisherCreate, PublisherUpdate } from '../interfaces/publisher';
-import { logger } from '../helpers/logger';
+import pool from '../config/database.js';
+import { PublisherModel } from '../models/PublisherModel.js';
+import type { Publisher, PublisherCreate, PublisherUpdate } from '../interfaces/publisher.js';
+import { logger } from '../helpers/logger.js';
 
 export class PublisherRepository {
     private async getClient(): Promise<PoolClient> {
